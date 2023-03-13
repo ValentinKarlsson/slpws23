@@ -1,0 +1,7 @@
+
+p Frågan du klickat på: #{@one_questions["title"]}
+p Svarsalternativen för fråga #{@one_questions["id"]}: 
+ul
+    - @all_answers_for_one_question.each do |answer|
+        li #{answer["title"]}
+/- # OBS! Jag behöver göra en if-sats för svarsalternativen, då det finns flera svarsalternativ för en "question_id"!

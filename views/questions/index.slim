@@ -1,5 +1,7 @@
 h1 Alla frågor 
 
 ol 
-    - questions.each do |question|
-    li 
+    - @result.each do |question|
+        li 
+            a href="questions/#{question['id']}" #{question["title"]} 
+            /Kolla SQL Order By för att göra i bokstavsordning.
