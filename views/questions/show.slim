@@ -1,7 +1,9 @@
 
-p Frågan du klickat på: #{@one_questions["title"]}
-p Svarsalternativen för fråga #{@one_questions["id"]}: 
+p Fråga: #{@one_questions["title"]}
+p Svarsalternativen: 
 ul
     - @all_answers_for_one_question.each do |answer|
         li #{answer["title"]}
 /- # OBS! Jag behöver göra en if-sats för svarsalternativen, då det finns flera svarsalternativ för en "question_id"!
+form action="/questions" method="get" 
+    input type="submit" value="Go back to questions"/

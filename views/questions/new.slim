@@ -3,4 +3,12 @@ form action="/questions" method="post"
     input type="text" name="alt_1" placeholder="Svarsalternativ 1" autocomplete="Off"/
     input type="text" name="alt_2" placeholder="Svarsalternativ 2" autocomplete="Off"/
     input type="text" name="alt_3" placeholder="Svarsalternativ 3" autocomplete="Off"/
+    label for="label_for_selected_options" Välj det svar som ska vara det rätta svaret:
+    select name="selected_true" id="selected_true"
+        option value="option_1" Svarsalternativ 1
+        option value="option_2" Svarsalternativ 2
+        option value="option_3" Svarsalternativ 3
     input type="submit" value="Skapa frågan"
+
+form action="/questions" method="get" 
+    input type="submit" value="Go back to questions"/

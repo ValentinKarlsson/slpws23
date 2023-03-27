@@ -1,13 +1,45 @@
-def make_questions_and_answeres(title, alt_1, alt_2, alt_3)
+def make_a_question(title)
     db = SQLite3::Database.new("db/main.db")
     db.results_as_hash = true
     db.execute("INSERT INTO question (value_of_question, title) VALUES (0, ?)",title)
-    id_new_question = select_all_from_a_tabel("question").last()['id']
-
-    db.execute("INSERT INTO answer (value_of_answer, title, question_id) VALUES (0, ?, ?)",alt_1,id_new_question)
-    db.execute("INSERT INTO answer (value_of_answer, title, question_id) VALUES (0, ?, ?)",alt_2,id_new_question)
-    db.execute("INSERT INTO answer (value_of_answer, title, question_id) VALUES (0, ?, ?)",alt_3,id_new_question)
 end
+
+def make_new_answers(title, id_from_question, false_or_true)
+    db = SQLite3::Database.new("db/main.db")
+    db.results_as_hash = true
+    db.execute("INSERT INTO answer (value_of_answer, title, question_id, false_or_true) VALUES (0, ?, ?, ?)",title,id_from_question,false_or_true)
+end
+
+def set_value_for_a_tabels_column(tabel, attribute_for_tabel, value_of_aft)
+    db = SQLite3::Database.new("db/main.db")
+    db.results_as_hash = true
+    db.execute("INSERT INTO #{tabel} (#{attribute_for_tabel}) VALUES (?)",value_of_aft)
+end
+
+def add_values_for_a_tabel(tabel, attribute_for_tabel_1, attribute_for_tabel_2, attribute_for_tabel_3, value_of_aft_1, value_of_aft_2, value_of_aft_3)
+    db = SQLite3::Database.new("db/main.db")
+    db.execute("INSERT INTO #{tabel} (#{attribute_for_tabel_1},#{attribute_for_tabel_2}, #{attribute_for_tabel_3}) VALUES (?,?,?)",value_of_aft_1,value_of_aft_2,value_of_aft_3)
+end
+
+=begin def current_question()
+    session[:current_question] = 0
+    @current_question = session[:current_question]
+end 
+=end
+=begin 
+def make_tabels(tabel, attribute_for_tabel_1, attribute_for_tabel_2, attribute_for_tabel_3, value_of_aft_1, value_of_id)
+    db = SQLite3::Database.new("db/main.db")
+    db.results_as_hash = true
+    db.execute("INSERT INTO #{tabel} (value_of_answer, title, question_id) VALUES (0, ?, ?)",value_for_tabel_1, value_of_id)
+end 
+=end
+
+def make_answers(value_of_titel, value_of_id)
+    db = SQLite3::Database.new("db/main.db")
+    db.results_as_hash = true
+    db.execute("INSERT INTO answer (value_of_answer, title, question_id) VALUES (0, ?, ?)",value_of_titel, value_of_id)
+end 
+
 
 =begin def take_the_last_question_id()
     db = SQLite3::Database.new("db/main.db")
@@ -27,14 +59,28 @@ def select_all_from_a_tabel(tabel)
     db.execute("SELECT * FROM #{tabel}")
 end
 
-def delete_a_column_for_a_tabel(tabel, attribute_for_tabel, variabel)
+def select_all_from_a_tabel_alfabetic_order(tabel, attribute_for_tabel, how_to_order_by)
     db = SQLite3::Database.new("db/main.db")
-    db.execute("DELETE FROM #{tabel} WHERE #{attribute_for_tabel} = ?",variabel)
+    db.results_as_hash = true
+    db.execute("SELECT * FROM #{tabel} ORDER BY #{attribute_for_tabel} #{how_to_order_by}")
 end
 
-def update_a_column_for_a_tabel(tabel, attribute_for_tabel, id_for_column_tabel, variabel)
+def delete_a_column_for_a_tabel(tabel, attribute_for_tabel, value_of_aft)
+    #aft = attribute_for_tabel
     db = SQLite3::Database.new("db/main.db")
-    db.execute("UPDATE #{tabel} SET #{attribute_for_tabel}=?,#{attribute_for_tabel}=? WHERE #{id_for_column_tabel} = ?",variabel,variabel,variabel) # Jag måste veta hur många attribute_for_tabel och variabel som jag behöver!
+    db.execute("DELETE FROM #{tabel} WHERE #{attribute_for_tabel} = ?",value_of_aft)
+end
+
+def update_a_column_for_a_tabel(tabel, attribute_for_tabel_1, id_for_column_tabel, value_of_aft_1, value_of_id_for_column_tabel)
+    # aft = attribute_for_tabel
+    db = SQLite3::Database.new("db/main.db")
+    db.execute("UPDATE #{tabel} SET #{attribute_for_tabel_1} = ? WHERE #{id_for_column_tabel} = ?",value_of_aft_1,value_of_id_for_column_tabel) # Jag måste veta hur många attribute_for_tabel och variabel som jag behöver!
+end
+
+def select_one_tabel(tabel, attribute_for_tabel, value_of_aft)
+    db = SQLite3::Database.new("db/main.db")
+    db.results_as_hash = true
+    db.execute("SELECT * FROM #{tabel} WHERE #{attribute_for_tabel} = ?", value_of_aft)
 end
 
 def select_specifik_question(tabel, id_tabel, titel, tabel_2)

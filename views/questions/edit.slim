@@ -1,6 +1,9 @@
-form action="/questions/#{result['']}/update" method="post" 
-    input type="text" name="question" value="#{result['']}"/
-    input type="hidden" name="alt_1" value="#{result['']}"/
-    input type="hidden" name="alt_2" value="#{result['']}"/
-    input type="hidden" name="alt_3" value="#{result['']}"/
+form action="/questions/#{@question['id']}/update" method="post" 
+    input type="text" name="question" value="#{@question['title']}"/
+    input type="text" name="alt_1" value="#{@answers[0]['title']}"/
+    input type="text" name="alt_2" value="#{@answers[1]['title']}"/
+    input type="text" name="alt_3" value="#{@answers[2]['title']}"/
     input type="submit" value="Edit it!"
+
+form action="/questions" method="get" 
+    input type="submit" value="Go back to questions"/

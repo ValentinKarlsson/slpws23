@@ -1,13 +1,18 @@
-h2 Calculator
-p Questions:
+h1 The Calculator 
+form action="/restart_quiz" method="post" 
+    input type="submit" value="Restart quiz"/
 
-p En lista på alla frågor. Förmodligen måste jag använda mig av en array som innehåller alla frågor. Därför måste jag först använda SQL språket för att koppla både frågorna som finns i databasen med arrayen. Genom att SPARA databasen i en array
-
-
-
-p Tips:
-
-p En lista på alla tips. Förmodligen måste jag använda mig av en array som innehåller alla tips. Därför måste jag först använda SQL språket för att koppla både tipsen som finns i databasen med arrayen. Genom att SPARA databasen i en array.
-
+- if @quiz_done == true
+    form action="/manage_question" method="post" 
+        p = @current_question["title"]
+        p Välj ett svar: 
+        input type="radio" id="answer0" name="answer" value="0"/
+        label for="answer0" #{@answers[0]['title']}
+        input type="radio" id="answer1" name="answer" value="1"/
+        label for="answer1" #{@answers[1]['title']}
+        input type="radio" id="answer2" name="answer" value="2"/
+        label for="answer2" #{@answers[2]['title']}
+        input type="submit" value="Välj"/
+- else 
+    p Du har svarat på alla frågor
     
-
