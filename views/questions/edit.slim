@@ -1,8 +1,12 @@
 form action="/questions/#{@question['id']}/update" method="post" 
-    input type="text" name="question" value="#{@question['title']}"/
-    input type="text" name="alt_1" value="#{@answers[0]['title']}"/
-    input type="text" name="alt_2" value="#{@answers[1]['title']}"/
-    input type="text" name="alt_3" value="#{@answers[2]['title']}"/
+    input type="text" name="question" value="#{@question['title']}" autocomplete="Off"/
+    input type="text" name="alt_1" value="#{@answers[0]['title']}" autocomplete="Off"/
+    input type="text" name="alt_2" value="#{@answers[1]['title']}" autocomplete="Off"/
+    input type="text" name="alt_3" value="#{@answers[2]['title']}" autocomplete="Off"/
+    select name="selected_true" id="selected_true"
+        option value="option_1" Svarsalternativ 1
+        option value="option_2" Svarsalternativ 2
+        option value="option_3" Svarsalternativ 3
     input type="submit" value="Edit it!"
 
 form action="/questions" method="get" 

@@ -1,7 +1,7 @@
 - if session[:id] == nil 
-    p Du behöver ha ett konto för att komma till Home!
+    p Du behöver ha ett konto för att få tillgång till hemsidans innehåll!
 form action="/users/new" method="post" 
-    input type="text" name="username" placeholder="Enter username"/
-    input type="password" name="password" placeholder="Enter password"/
-    input type="password" name="password_confirm" placeholder="Enter password Again"/
+    input type="text" name="username" placeholder="Enter username" autocomplete="Off"/
+    input type="password" name="password" placeholder="Enter password" autocomplete="Off"/
+    input type="password" name="password_confirm" placeholder="Enter password Again" autocomplete="Off"/
     input type="submit" value="Registrera ny användare"/

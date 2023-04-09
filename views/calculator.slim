@@ -14,5 +14,13 @@ form action="/restart_quiz" method="post"
         label for="answer2" #{@answers[2]['title']}
         input type="submit" value="Välj"/
 - else 
-    p Du har svarat på alla frågor
+    p Du har svarat på alla frågor!
+    p Ditt ekologiska footavtryck är följande: #{@value_of_ecological_footprints}
+    - if @value_of_ecological_footprints > 1
+        p Du har ett ganska högt värdet på ditt ekologiska fotavtryck. Tips för att du ska få ett mindre värde på ditt ekologiska fotavtryck: 
+        p - Kom ihåg vad du svarade tidigare. Tycker du att det var dåliga svar eller inte?
+        p - Tänk hur dina handlingar påverkar miljön. Kom på åtminstone tre saker!
+        p - Behöver du ändra din livsstil och i så fall tycker du det är värt?
+    - else
+        p Du har ett bra värde på ditt ekologsika fotavtryck. Därför får du inga tips på att förbättra det.
     

@@ -5,5 +5,11 @@ ul
     - @all_answers_for_one_question.each do |answer|
         li #{answer["title"]}
 /- # OBS! Jag behöver göra en if-sats för svarsalternativen, då det finns flera svarsalternativ för en "question_id"!
+p Alla som redigerat frågan: 
+    
+- @all_users.each do |user|
+    p #{user["username"]}
+    /Innan .each loopen ska det finnas en if-sats som gör att man inte visas upp flera gånger när man redigerar en och samma fråga flera gånger. 
+    /Sedan en .each-loop som visar upp alla id:en som redigerat en viss fråga i form av titlen på usern, dvs. namnet på användaren ska visas upp.
 form action="/questions" method="get" 
     input type="submit" value="Go back to questions"/
