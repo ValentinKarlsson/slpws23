@@ -1,8 +1,15 @@
 h2 Logga in! 
 
 /Lägg till här en if-sats som utgår ifrån om lösenordet man skrivit eller användernamnet man skrivit är felaktigt ska ett error meddelande dyka upp här!
+- if @error_login
+    p ERROR: Du har antingen skrivit in fel användarnamn och/eller fel lösenord.
+
+- if @error_no_string
+    p ERROR: Du har inte skrivit in antingen ditt användarnamn och/eller lösenord
 
 form action="login" method="POST"
     input type="text" name="username" placeholder="Enter username" autocomplete="Off"/
     input type="password" name="password" placeholder="Enter password" autocomplete="Off"/
     input type="submit" value="Logga in tack!"/
+
+/- session[:error_login] = false # FEL? Fråga Leo! Svar: Använd @error_login i get-routen

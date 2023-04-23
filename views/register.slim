@@ -1,7 +1,19 @@
+h2 Registera dig nu!
 - if session[:id] == nil 
     p Du behöver ha ett konto för att få tillgång till hemsidans innehåll!
+- if @error_register
+    p ERROR: Du har skrivit in fel lösenord.
+
+- if @error_same_name
+    p ERROR: Användarnamnet du skrivit in är inte unikt.
+
+- if @error_no_string 
+    p ERROR: Du har inte skrivit in antingen ditt användarnamn och/eller lösenord och/eller lösenordet igen.
+
 form action="/users/new" method="post" 
     input type="text" name="username" placeholder="Enter username" autocomplete="Off"/
     input type="password" name="password" placeholder="Enter password" autocomplete="Off"/
     input type="password" name="password_confirm" placeholder="Enter password Again" autocomplete="Off"/
     input type="submit" value="Registrera ny användare"/
+
+/- session[:error_register] = false # FEL? Fråga Leo! Svar: Använd liknande som i @error_login i get-routen

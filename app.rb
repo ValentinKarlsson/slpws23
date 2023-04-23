@@ -6,14 +6,24 @@ require 'sinatra/reloader'
 require_relative 'model/model.rb'
 enable :sessions
 
+include Model
+
+# Jag behöver lägga till verifiering om ett användarnamn redan har tagits. <-- Jag har gjort detta! 
+# Jag behöver även lägga till verifiering som kollar i forumsen att man skrivit något. Om man inte har skrivit något i rutorna ska man få ett error meddelande som gör att det man vill göra/ändra avbryts. 
+
 #helper do
     #För att kunna nvända funktioner i slim
 
+# A function that looks if there is an account. 
+#
 def check_if_there_is_a_account()
     if session[:id] == nil
         redirect('/')
     end
 end
+
+# A helpers function that is a function that can be used in slim-files. 
+# In the help function there is another function that looks if an account is not admin.
 
 helpers do
     def check_if_an_account_is_not_admin()
@@ -23,63 +33,144 @@ helpers do
     end
 end    
 
+# Display register form
+# 
 get('/') do
+    @error_no_string = session[:error_no_string]
+    @error_same_name = session[:error_same_name]
+    @error_register = session[:error_register]
+    session[:error_register] = false
+    session[:error_same_name] = false
+    session[:error_no_string] = false
     slim(:register)
 end
-  
+
+# Display login form
+#
 get('/showlogin') do
+    @error_no_string = session[:error_no_string]
+    @error_login = session[:error_login]
+    session[:error_login] = false
+    session[:error_no_string] = false
     slim(:login)
 end
 
+# Display site that shows an erro message
+#
 get('/access_denied') do
     slim(:access_denied)
 end
 
+# Logs out the user from the account they are using.
+#
 post("/logout") do
     session[:id] = nil
     redirect("/showlogin")
 end
-  
+ 
+# Attempts login and updates sessions. The post-route either redirects to '/showlogin' or '/meny'
+# 
+# @param [String] username, The username
+# @param [String] password, The username
+
 post('/login') do
+    session[:error_no_string] = false
+    session[:error_login] = false
     username = params[:username]
     password = params[:password]
+
+    if if_a_variable_is_an_empty_string(username)
+        session[:error_no_string] = true
+        redirect('/showlogin')
+    end
+
+    if if_a_variable_is_an_empty_string(password)
+        session[:error_no_string] = true
+        redirect('/showlogin')
+    end
+
     db = SQLite3::Database.new('db/todo2022.db')
     db.results_as_hash = true
     user = select_one_tabel("user", "username", username).first
+
+    if user == nil
+        session[:error_login] = true
+        redirect('/showlogin')
+    end
     pwdigest = user["password_digest"]
     id = user["id"]
-  
-    if BCrypt::Password.new(pwdigest) == password
+    if if_two_values_are_the_same(BCrypt::Password.new(pwdigest), password) # Behöver jag göra en funktion här? Fråga Leo! Svar: Funktion ska användas.
       session[:id] = id
       redirect('/meny')
+    elsif if_two_values_are_not_the_same(user, username) # Behöver jag göra en funktion här? Fråga Leo! Svar:  Funktion ska användas.
+        session[:error_login] = true
+        redirect('/showlogin')
     else
-        "FEL LÖSENORD!"
+        session[:error_login] = true
+        redirect('/showlogin')
         #Lägg till en länk eller knapp som gör att du kan välja att gå tillbaka för att registrera dig.
         # Hur lägger man till en slags knapp i en post_route?
     end
 end
 
+# Makes a new user that redirect to '/'
+#
+# @param [String] username, The username
+# @param [String] password, The password
+# @param [String] password_confirm, The password typed again
 post('/users/new') do
     username = params[:username]
     password = params[:password]
     password_confirm = params[:password_confirm]
-  
-    if (password == password_confirm)
+    session[:error_register] = false
+    session[:error_same_name] = false
+
+    if if_a_variable_is_an_empty_string(username)
+        session[:error_no_string] = true
+        redirect('/')
+    end
+
+    if if_a_variable_is_an_empty_string(password)
+        session[:error_no_string] = true
+        redirect('/')
+    end
+
+    if if_a_variable_is_an_empty_string(password_confirm)
+        session[:error_no_string] = true
+        redirect('/')
+    end
+
+    all_users_content = select_all_from_a_tabel("user")
+    p all_users_content
+    p all_users_content.length
+    i = 0
+    while i < all_users_content.length
+        a_users_name = all_users_content[i]["username"]
+        if if_two_values_are_the_same(username, a_users_name)
+            session[:error_same_name] = true
+            redirect('/')
+        end
+        i += 1
+    end
+
+    if if_two_values_are_the_same(password, password_confirm) # Gör en funktion som kollar på detta påstående. Generellt: Gör en funktion i model.rb om man kollar på en variabels värde som är en input av en användare.
       #Lägg till användare
       ecological_footprint_value = 0
       password_digest = BCrypt::Password.create(password)
       db = SQLite3::Database.new('db/todo2022.db')
       add_values_for_a_tabel("user", "username", "password_digest", "ecological_footprint_value", username, password_digest, ecological_footprint_value)
-      redirect('/')
+      redirect('/showlogin')
     else
+        session[:error_register] = true
         #Felhantering
-        "Lösenorden matchade inte!"
+        redirect('/')
         #Lägg till en länk eller knapp som gör att du kan välja att gå tillbaka för att registrera dig.
         # Hur lägger man till en slags knapp i en post_route?
     end
 end
   
-
+# Function that 
+#
 before do
     if session[:calc_index] == nil
         session[:calc_index] = 0
@@ -87,6 +178,14 @@ before do
 end
 
 get("/calculator") do
+    # reset_quiz = params[:reset_quiz]
+    # if reset_quiz
+    #     update_a_column_for_a_tabel("user", "ecological_footprint_value", "id", 0, session[:id])   
+    # end
+    #update_a_column_for_a_tabel("user", "ecological_footprint_value", "id", 0, session[:id]) <-- # Var ska denna kod befinna sig? Det går inte att ha den här, då det för varje gång man svarar på en fråga ändrar värdet till 0, vilket gör att man alltid kommer att ha värdet 0 oavsett vad man svarar efter att man gjort färdigt hela quizet.
+
+    #p select_one_tabel("user", "id", session[:id]).first()["ecological_footprint_value"]
+    #select_one_tabel("user", "id", session[:id]).first()["ecological_footprint_value"] = 0 # Vill jag updata värdet eller inserta ett värde? Fråga Leo! Svar: Använd UPDATE för att uppdatera värdet
     check_if_there_is_a_account()
     all_questions = select_all_from_a_tabel("question")# hämta alla frågor. Typ: "SELECT * FROM question"
 
@@ -128,7 +227,7 @@ post("/manage_question") do
     @current_question = all_questions[session[:calc_index]]
     @answers = select_all_answers_for_one_question("answer", "question_id", @current_question["id"])# hämta alla answers som tillhör frågan. Typ: "SELECT * FROM answers WHERE question_id = ?", @current_question["id"]
 
-    if @answers[user_answer]["false_or_true"] == "true"
+    if @answers[user_answer]["false_or_true"] == "true" #Borde jag använda en funktion här? Fråga Leo! Svar: 
         # hämta ecological_footprint_value från databas. Spara det i en variabel. Vi kallar variabeln: Fisk
         # Öka Fisk med 1
         # Uppdatera ecological_footprint_value till Fisk i databasen med UPDATE
@@ -273,14 +372,14 @@ post("/questions/:id/update") do
     delete_a_column_for_a_tabel("answer", "question_id", id)
     i = 0
     while i < all_selected_options.length
-        if all_selected_options[i] == selected_true
+        if all_selected_options[i] == selected_true #Borde jag använda en funktion här? Fråga Leo! Svar: 
             make_new_answers(all_answers[i], id, "true")
         else
             make_new_answers(all_answers[i], id, "false")
         end
         i += 1
     end
-
+    # Kollar om det är en ny användare som redigerar en fråga. Om det är en ny ska det visas på hemsidan. Om det är en en användare som redan har redigerat frågan ska den inte visas flera gånger. 
     new_editor = true
     all_relations = select_one_tabel("user_question_relation", "question_id", id)
     if all_relations != nil

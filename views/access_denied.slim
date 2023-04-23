@@ -1,4 +1,10 @@
-p Ditt användarnamn/lösenord överstämmer inte med din registrering.
-p Gör om det genom att trycka på knappen nedanför: 
-form action="/login" method="get" 
-    input type="submit" value="Logga in igen" /
+p Ditt användarnamn/lösenord överstämmer inte.
+- p @from_register
+- if @from_register 
+    p Gör om det genom att trycka på knappen nedanför: 
+    form action="/" method="get" 
+        input type="submit" value="Registrera igen" /
+- if @from_login
+    p Gör om det genom att trycka på knappen nedanför: 
+    form action="/login" method="get" 
+        input type="submit" value="Logga in igen" /

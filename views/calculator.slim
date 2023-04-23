@@ -1,4 +1,5 @@
 h1 The Calculator 
+p Om du vill göra om quizet måste du trycka på "Restart quiz" knappen.
 form action="/restart_quiz" method="post" 
     input type="submit" value="Restart quiz"/
 
@@ -23,4 +24,5 @@ form action="/restart_quiz" method="post"
         p - Behöver du ändra din livsstil och i så fall tycker du det är värt?
     - else
         p Du har ett bra värde på ditt ekologsika fotavtryck. Därför får du inga tips på att förbättra det.
+/    - select_one_tabel("user", "id", session[:id]).first()["ecological_footprint_value"] = 0
     
