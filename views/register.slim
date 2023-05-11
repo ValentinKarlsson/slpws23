@@ -1,5 +1,5 @@
 h2 Registera dig nu!
-- if session[:id] == nil 
+- if @id_of_user == nil 
     p Du behöver ha ett konto för att få tillgång till hemsidans innehåll!
 - if @error_register
     p ERROR: Du har skrivit in fel lösenord.
@@ -9,6 +9,9 @@ h2 Registera dig nu!
 
 - if @error_no_string 
     p ERROR: Du har inte skrivit in antingen ditt användarnamn och/eller lösenord och/eller lösenordet igen.
+
+- if @error_no_space
+    p ERROR: Du får INTE ha något mellanslag i både ditt användarnamn och ditt lösenord.
 
 form action="/users/new" method="post" 
     input type="text" name="username" placeholder="Enter username" autocomplete="Off"/

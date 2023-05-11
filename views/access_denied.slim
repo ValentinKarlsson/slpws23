@@ -1,5 +1,3 @@
-p Ditt användarnamn/lösenord överstämmer inte.
-- p @from_register
 - if @from_register 
     p Gör om det genom att trycka på knappen nedanför: 
     form action="/" method="get" 
@@ -8,3 +6,22 @@ p Ditt användarnamn/lösenord överstämmer inte.
     p Gör om det genom att trycka på knappen nedanför: 
     form action="/login" method="get" 
         input type="submit" value="Logga in igen" /
+
+- if @wrong_user
+    p Du har valt att redigera någon annans fråga. Det får man inte göra! 
+    form action="/questions" method="get" 
+        input type="submit" value="All questions"/
+
+    form action="/calculator" method="get" 
+        input name="reset_quiz" type="hidden" value="true"
+        input type="submit" value="Do the quiz"/
+- if @wrong_like_for_your_own_question
+    p Du har valt att "lika" din egen fråga. Det får man inte göra! 
+    p Gå tillbaka till frågorna och "lika" frågor som du själv inte gjort.
+    form action="/questions" method="get" 
+        input type="submit" value="All questions"/
+
+- if @cooldown
+    p Du får vänta i några sekunder innan du kan logga in igen.
+    form action="/showlogin" method="get" 
+        input type="submit" value="Logga in igen"/

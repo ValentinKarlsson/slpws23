@@ -1,0 +1,8 @@
+h2 Alla användare som har konto på denna hemsidan!
+
+- @all_users.each do |user|
+    p #{user["username"]}
+    - if @id_of_user == 1
+        form method="POST" action="/user/#{user['id']}/delete"
+            input type="submit" value="Delete"
+        

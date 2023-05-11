@@ -7,7 +7,7 @@ html lang="en"
         title Ekologiskt fotavtryck
     body 
         nav
-            - if session[:id] == nil
+            - if @id_of_user == nil # Hur gör jag om jag ska göra om session[:id] till en at-variabel? Fråga Leo! Svar:
                 a href="/" Register
                 a href="/showlogin" Login
             - else

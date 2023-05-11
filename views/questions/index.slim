@@ -4,14 +4,18 @@ ul
     - @result.each do |question|
         li 
             a href="questions/#{question['id']}" #{question["title"]} 
-            a href="questions/#{question['id']}/edit" Uppdatera
-            - if session[:id] == 1
+            - if question["user_id"] == @id_of_user || @id_of_user == 1
+                a href="questions/#{question['id']}/edit" Uppdatera
+            - if question["user_id"] != @id_of_user
+                form action="/process_of_a_like/#{question['id']}" method="post" 
+                    input type="submit" value="Like a question"
+            - if @id_of_user == 1
                 form method="POST" action="/questions/#{question['id']}/delete"
                     input type="submit" value="Delete"
             /Kolla SQL Order By för att göra i bokstavsordning.
             /Hur ska man göra för att visa att man vill ha ett id från frågan som valts.
 
-- if session[:id] == 1
+- if @id_of_user != nil
     form action="/questions/new" method="get"  
         input type="submit" value="Make a question and answers"/
 

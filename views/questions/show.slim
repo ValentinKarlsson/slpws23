@@ -5,7 +5,7 @@ ul
     - @all_answers_for_one_question.each do |answer|
         li #{answer["title"]}
 /- # OBS! Jag behöver göra en if-sats för svarsalternativen, då det finns flera svarsalternativ för en "question_id"!
-p Alla som redigerat frågan: 
+p Alla som har "likat" frågan: 
     
 - @all_users.each do |user|
     p #{user["username"]}
